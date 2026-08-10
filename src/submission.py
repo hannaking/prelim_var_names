@@ -9,11 +9,8 @@ class Submission(cst.MetadataDependent):
 
     def __init__(self, filename : str) -> None:
         # read code file
-        try:
-            with open(filename) as f:
-                self.file_text: str = f.read()
-        except Exception as e:
-            print(f"Problem reading file '{filename}': {e}")
+        with open(filename) as f:
+            self.file_text: str = f.read()
         # module is the CST
         self.module : cst.Module = cst.parse_module(self.file_text)
         # need wrapper for metadata access
