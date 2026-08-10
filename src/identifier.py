@@ -22,7 +22,7 @@ class Identifier(cst.MetadataDependent):
             inferred = self.script.infer(line=self.range.start.line, column=self.range.start.column)
             if inferred:
                 # may result in more than one type for a single variable
-                types = {inf.name for inf in inferred}
+                types = [inf.name for inf in inferred]
                 return types
             else:
                 return ["unknown"]

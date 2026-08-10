@@ -1,12 +1,13 @@
 from submission import Submission
-from registry import RULES
-from identifier import Identifier
+import runpy
 
 filename = 'sample.py'
 entry = Submission(filename)
 
+result = runpy.run_path('rules.py')
+registry = result["registry"]
+
 for i in entry.identifiers:
     # run the rules from the registry
-    for key in RULES:                     # how to improve?
-        print(f'running {key}')
-        RULES[key](i)
+    for key in registry.registry:
+        registry.call(key, i)
