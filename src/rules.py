@@ -2,10 +2,10 @@ from identifier import Identifier
 from registry import *
 import constants
 from registry import RuleRegistry
-#import nltk
-#from nltk import brown
+import nltk
+from nltk.corpus import words       # also tried brown, both still flag common words as uncommon/nondictionary
 
-#nltk.download('brown')
+#nltk.download('words')
 
 registry = RuleRegistry()
 
@@ -24,11 +24,14 @@ def lowercase(i : Identifier):
 @registry.register("same as type")
 def same_as_type(i : Identifier):
     name = i.value.lower()
-    if name in i.types[0].lower():
+    if name == i.types[0].lower():
         print(f'Do not use the type, {i.types[0]}, as the name for {name}.')
 
-#@registry.register("dictionary_words")
-#def use_dictionary_words(i : Identifier):
-#    name = i.value
-#    if name not in brown.words():
-#         print(f'Your variable {name} may be an uncommon word. Consider using English dictionary word(s) instead.')
+@registry.register("dictionary_words")
+def use_dictionary_words(i : Identifier):
+    name = i.value
+    split = name.split('_')
+    for word in split:
+        if word not in words.words() and word.lower() not in words.words():
+            print(f'Your variable {name} may contain an uncommon word {word}. Consider using English dictionary word(s) instead.')
+

@@ -1,5 +1,5 @@
 from submission import Submission
-import runpy
+import runpy                          # how to improve?
 
 filename = 'sample.py'
 entry = Submission(filename)
