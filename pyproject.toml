@@ -1,0 +1,13 @@
+[project]
+name = "prelim_var_names"
+version = "0.0.1"
+readme = "README.md"
+description = "Description here"
+authors = [
+    { name = "Hanna King"}
+]
+requires-python = ">=3.14"
+dependencies = [
+    "libcst>=1.9.0",
+    "jedi>=0.20.0"
+]
