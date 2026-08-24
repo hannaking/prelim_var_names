@@ -2,10 +2,11 @@ from identifier import Identifier
 from registry import *
 import constants
 from registry import RuleRegistry
-import nltk
-from nltk.corpus import words       # also tried brown, both still flag common words as uncommon/nondictionary
+#import nltk
+#from nltk.corpus import words       # also tried brown, both still flag common words as uncommon/nondictionary
 
-#nltk.download('words')
+with open("../data/count_1w100k.txt", "r") as file:
+    dictionary = first_words = [line.split()[0].strip().lower() for line in file if line.strip()]
 
 registry = RuleRegistry()
 
@@ -32,6 +33,6 @@ def use_dictionary_words(i : Identifier):
     name = i.value
     split = name.split('_')
     for word in split:
-        if word not in words.words() and word.lower() not in words.words():
+        if word.lower() not in dictionary:
             print(f'Your variable {name} may contain an uncommon word {word}. Consider using English dictionary word(s) instead.')
 
