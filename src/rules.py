@@ -6,7 +6,9 @@ from registry import RuleRegistry
 #from nltk.corpus import words       # also tried brown, both still flag common words as uncommon/nondictionary
 
 with open("../data/count_1w100k.txt", "r") as file:
-    dictionary = first_words = [line.split()[0].strip().lower() for line in file if line.strip()]
+    dictionary = [line.split()[0].strip().lower() for line in file if line.strip()]
+with open("../data/metasyntactic.txt", "r") as file:
+    metasyntactic = [line.strip() for line in file]
 
 registry = RuleRegistry()
 
@@ -33,6 +35,11 @@ def use_dictionary_words(i : Identifier):
     name = i.value
     split = name.split('_')
     for word in split:
-        if word.lower() not in dictionary:
+        if word.lower not in dictionary:
             print(f'Your variable {name} may contain an uncommon word {word}. Consider using English dictionary word(s) instead.')
 
+@registry.register("metasyntactic")
+def uses_metasyntactic_name(i : Identifier):
+    name = i.value
+    if name.lower() in metasyntactic:
+        print(f'Use meaningful names. {name} is a placeholder name.')

@@ -1,0 +1,17 @@
+foo
+bar
+foobar
+baz
+qux
+quux
+corge
+grault
+garply
+waldo
+fred
+plugh
+xyzzy
+thud
+spam
+ham
+eggs
