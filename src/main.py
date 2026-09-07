@@ -2,7 +2,7 @@ from submission import Submission
 import runpy                          # how to improve?
 from namesake.namesake import *
 
-filename = 'sample.py'
+filename = '../data/sample.py'
 entry = Submission(filename)
 
 result = runpy.run_path('rules.py')

@@ -1,0 +1,8 @@
+Name misaligned with type; boolean_prefix; Your boolean variable for_you should include a verb prefix. Example prefixes include is, was, should, can, did, and had.
+Name misaligned with type; singular for noncollections; Your variable numbers is a singular type int, but numbers is plural. Non-collection type variables hold only one value at a time and should therefore be singular.
+Name misaligned with type; type in name; Do not use the type, str, as the name for output_string.
+Name misaligned with type; same as type; Do not use the type, Present, as the name for present.
+Name misaligned with type; type in name; Do not use the type, Present, as the name for present.
+Name misaligned with type; plural for collections; Your variable lis is a collection type list, but lis is singular. Collection type variables may hold multiple values and should therefore be plural.
+Name misaligned with type; type in name; Do not use the type, str, as the name for output_str.
+Name misaligned with type; boolean_prefix; Your boolean variable active should include a verb prefix. Example prefixes include is, was, should, can, did, and had.
