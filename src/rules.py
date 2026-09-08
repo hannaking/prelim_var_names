@@ -35,7 +35,7 @@ def same_as_type(i : Identifier):
 def type_in_name(i : Identifier):
     name = i.value
     if i.types[0].lower() in name.lower():
-        return f'Do not use the type, {i.types[0]}, as the name for {name}.'
+        return f'Do not use the type, {i.types[0]}, in the name for {name}.'
 
 @registry.register("plural for collections")
 def plural_for_collections(i : Identifier):

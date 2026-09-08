@@ -25,7 +25,8 @@ class Submission(cst.MetadataDependent):
         self.wrapper.visit(finder)
         positions = self.wrapper.resolve(PositionProvider)
 
-        for node in finder.variables:
-
+        for i in range(len(finder.values)):
+            node = finder.values[i][2]
             position = positions.get(node)
-            self.identifiers.add(Identifier(node, position, self.file_text))
+            parent = finder.values[i][3]
+            self.identifiers.add(Identifier(node, position, parent, self.file_text))
