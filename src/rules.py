@@ -11,7 +11,8 @@ with open("../data/count_1w100k.txt", "r") as file:
     dictionary = [line.split()[0].strip().lower() for line in file if line.strip()]
 with open("../data/metasyntactic.txt", "r") as file:
     metasyntactic = [line.strip() for line in file]
-registry = RuleRegistry()
+type_registry = RuleRegistry()
+
 
 #@registry.register("avoid single letter names")
 #def avoid_single_letter(i : Identifier):
@@ -25,25 +26,25 @@ registry = RuleRegistry()
 #    if name != name.lower():
 #        print(f'{name} violates the snake_case capitalization convention.')
 
-@registry.register("same as type")
+@type_registry.register("same as type")
 def same_as_type(i : Identifier):
     name = i.value
     if name.lower() == i.types[0].lower():
         return f'Do not use the type, {i.types[0]}, as the name for {name}.'
 
-@registry.register("type in name")
+@type_registry.register("type in name")
 def type_in_name(i : Identifier):
     name = i.value
     if i.types[0].lower() in name.lower():
         return f'Do not use the type, {i.types[0]}, in the name for {name}.'
 
-@registry.register("plural for collections")
+@type_registry.register("plural for collections")
 def plural_for_collections(i : Identifier):
     name = i.value
     if i.types[0] in constants.COLLECTION_TYPES and not is_plural(name):
         return f'Your variable {name} is a collection type {i.types[0]}, but {name} is singular. Collection type variables may hold multiple values and should therefore be plural.'
 
-@registry.register("singular for noncollections")
+@type_registry.register("singular for noncollections")
 def singular_non_collections(i : Identifier):
     name = i.value
     if i.types[0] not in constants.COLLECTION_TYPES and is_plural(name):
@@ -55,7 +56,7 @@ def is_plural(name : str) -> bool:
     tags = [t[1] for t in tagged]
     return 'NNS' in tags
 
-@registry.register("boolean_prefix")
+@type_registry.register("boolean_prefix")
 def boolean_prefix_present(i : Identifier):
     name = i.value
     words : list[str] = name.split('_')

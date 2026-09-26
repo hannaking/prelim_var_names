@@ -9,7 +9,7 @@ result = runpy.run_path('rules.py')
 
 #exec(open("rules.py").read()) # doesn't seem particularly faster than runpy? suggestions?
 
-registry = result["registry"]
+registry = result["type_registry"]
 
 #run_namesake([i.value for i in entry.identifiers])
 #print()
@@ -20,7 +20,6 @@ for i in entry.identifiers:
         text_from_rule : str = registry.call(key, i)
         if text_from_rule is not None:
             output += (f'Name misaligned with type; {key}; {text_from_rule}\n')
-
 
 # diagnosis, rule, identifier into a text file (seperated by ;)
 with open('../data/report.txt', 'w') as file:

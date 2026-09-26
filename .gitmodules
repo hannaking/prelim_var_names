@@ -1,0 +1,3 @@
+[submodule "src/external-folder"]
+	path = src/external-folder
+	url = https://github.com/hannaking/jorma.git
