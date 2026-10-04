@@ -12,6 +12,7 @@ with open("../data/count_1w100k.txt", "r") as file:
 with open("../data/metasyntactic.txt", "r") as file:
     metasyntactic = [line.strip() for line in file]
 type_registry = RuleRegistry()
+#role_registry = RuleRegistry()
 
 
 #@registry.register("avoid single letter names")
@@ -26,29 +27,37 @@ type_registry = RuleRegistry()
 #    if name != name.lower():
 #        print(f'{name} violates the snake_case capitalization convention.')
 
+#@role_registry.register("well known singular letter stepper")
+#def _(i : Identifier):
+#    pass
+
 @type_registry.register("same as type")
 def same_as_type(i : Identifier):
     name = i.value
     if name.lower() == i.types[0].lower():
         return f'Do not use the type, {i.types[0]}, as the name for {name}.'
+    return None
 
 @type_registry.register("type in name")
 def type_in_name(i : Identifier):
     name = i.value
     if i.types[0].lower() in name.lower():
         return f'Do not use the type, {i.types[0]}, in the name for {name}.'
+    return None
 
 @type_registry.register("plural for collections")
 def plural_for_collections(i : Identifier):
     name = i.value
     if i.types[0] in constants.COLLECTION_TYPES and not is_plural(name):
         return f'Your variable {name} is a collection type {i.types[0]}, but {name} is singular. Collection type variables may hold multiple values and should therefore be plural.'
+    return None
 
 @type_registry.register("singular for noncollections")
 def singular_non_collections(i : Identifier):
     name = i.value
     if i.types[0] not in constants.COLLECTION_TYPES and is_plural(name):
         return f'Your variable {name} is a singular type {i.types[0]}, but {name} is plural. Non-collection type variables hold only one value at a time and should therefore be singular.'
+    return None
 
 def is_plural(name : str) -> bool:
     tokens = nltk.word_tokenize(name)
@@ -62,6 +71,7 @@ def boolean_prefix_present(i : Identifier):
     words : list[str] = name.split('_')
     if i.types[0] == "bool" and words[0] not in constants.BOOLEAN_PREFIX:
         return f'Your boolean variable {name} should include a verb prefix. Example prefixes include is, was, should, can, did, and had.'
+    return None
 
 #@registry.register("dictionary_words")
 #def use_dictionary_words(i : Identifier):
@@ -75,4 +85,4 @@ def boolean_prefix_present(i : Identifier):
 #def uses_metasyntactic_name(i : Identifier):
 #    name = i.value
 #    if name.lower() in metasyntactic:
-#        print(f'Use meaningful names. {name} is a placeholder name.')
+#        print(f'Use meaningful names. {name} is a placeholder name.') 
