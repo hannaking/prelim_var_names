@@ -1,19 +1,22 @@
 import libcst as cst
 import jedi
-from libcst.metadata import CodeRange
+from libcst.metadata import ParentNodeProvider
+from jorma.src.jorma.varinfo import VarInfo
 
 class Identifier(cst.MetadataDependent):
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider,)
+    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider, cst.metadata.ParentNodeProvider,)
 
-    def __init__(self, node : cst.Node, position : cst.CodeRange, source_code : str): # start : cst.CodePosition, end : cst.CodePosition, source_code : str) -> None:
+    def __init__(self, node : cst.Node, position : cst.CodeRange, parent, source_code : str, role_dict : list[tuple[VarInfo, str]]): # start : cst.CodePosition, end : cst.CodePosition, source_code : str) -> None:
         self.value : str = node.value
         self.range : cst.metadata.CodeRange = cst.metadata.CodeRange(position.start, position.end)
+        self.parent = parent
 
         # Jedi Script object for type inference - also why i need the position info
         self.script = jedi.Script(source_code)
         self.types : list[str] = self.type_with_jedi(node)
         # do I also need parent? ex. assign, attribute, for, etc
-        self.plural : bool = self.plurality()
+        #self.plural : bool = self.is_plural()
+        self.role = self.get_role(self.value, role_dict)
 
     def type_with_jedi(self, node : cst.Node) -> list[str]:
         try:
@@ -29,8 +32,16 @@ class Identifier(cst.MetadataDependent):
         except Exception as e:
             print(f"Problem inferring type for '{node.value}': {e}")
 
-    def assign_role(self) -> None:
-        pass
+    def is_attribute(self) -> bool:
+        #print(type(self.parent))
+        return isinstance(self.parent, cst.Attribute)
 
-    def plurality(self) -> bool:
+    def get_role(self, target, role_dict) -> str:
+        role = "unknown"
+        for item, assignment in role_dict:
+            if item.name == target:
+                role = assignment
+        return role
+
+    def is_plural(self) -> bool:
         pass

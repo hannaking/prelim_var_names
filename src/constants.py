@@ -7,3 +7,5 @@ ALL_TYPES : Final[str] = ['bool', 'int', 'float', 'complex', 'list', 'tuple', 'r
 COLLECTION_TYPES : Final[str] = ['list', 'set', 'frozenset', 'dict', 'tuple', 'range', 'bytearray']
 
 BOOLEAN_PREFIX : Final[str] = ['is', 'has', 'can', 'should', 'did', 'was']
+
+WELL_KNOWN_ITERATOR : Final[str] = ['i', 'j', 'k']
