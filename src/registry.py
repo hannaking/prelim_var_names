@@ -1,8 +1,8 @@
 from types import FunctionType
 
 class RuleRegistry:
-    def __init__(self):
-        self.registry : dict[str, FunctionType]= {}
+    def __init__(self): #, serial_representation = None):
+        self.registry : dict[str, FunctionType] = {}
     def register(self, name : str):
         def decorator(func : FunctionType):
             self.registry[name] = func

@@ -9,3 +9,5 @@ COLLECTION_TYPES : Final[str] = ['list', 'set', 'frozenset', 'dict', 'tuple', 'r
 BOOLEAN_PREFIX : Final[str] = ['is', 'has', 'can', 'should', 'did', 'was']
 
 WELL_KNOWN_ITERATOR : Final[str] = ['i', 'j', 'k']
+PEP8_BANNED_SINGLE_CHARACTER : Final[str] = ['l', 'O', 'I']
+NUMERIC_NAMES : Final[str] = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'zero', 'hundred', 'thousand', 'teen']

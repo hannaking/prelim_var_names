@@ -1,46 +1,52 @@
 from submission import Submission
-import runpy                          # how to improve?
-from namesake.namesake import *
-import sys
 from pathlib import Path
 import libcst
+from registry import RuleRegistry
+#import subprocess
+#import sys
 
-filename = sys.argv[1]
-# Source - https://stackoverflow.com/a/47496703
-# Posted by mxdbld, modified by community. See post 'Timeline' for change history
-# Retrieved 2026-10-01, License - CC BY-SA 4.0
-alias = Path(filename).stem
+EXCEPTED_VAR_NAMES = ["for_you"]
 
-print("running on", alias)
+def run(filename : Path, registry : RuleRegistry):
+    alias = Path(filename).stem
 
-try:
-    entry = Submission(filename)
-except libcst._exceptions.ParserSyntaxError:
+    try:
+        entry = Submission(filename)
+    except libcst._exceptions.ParserSyntaxError:
+        with open("../data/syntax_errors.txt", "a") as file:
+            file.write(f'{alias}; syntax error\n')
+        return
+    #print("here")
+    # run pep8 naming checks first
+    #  if any trigger, don't run the registry on that var name
+    #ruff_result = subprocess.run([sys.executable,
+    #                              "-m",
+    #                              "ruff",
+    #                              "check",
+    #                              filename,
+    #                              "--select",
+    #                              "N,PL",
+    #                              "--output-format",
+    #                              "json"],
+    #                              capture_output=True,
+    #                              text=True)
+    #print(f'ruff stdout: {ruff_result.stdout}')
+
+    output : str = ""
+    for i in entry.identifiers:
+        # run the rules from the registry
+        if i.value in EXCEPTED_VAR_NAMES:
+            with open("../data/skipped_vars.txt", "a") as file:
+                file.write(f'{i.value} was provided by the assignment and will be skipped.\n')
+            continue
+        for key in registry.registry:
+            text_from_rule : str = registry.call(key, i)
+            if text_from_rule is not None:
+                output += (f'{alias}; {i.qualified_name}; {i.types[0]}; {key}; {True}\n')# {text_from_rule}\n')
+            else:
+                output += (f'{alias}; {i.qualified_name}; {i.types[0]}; {key}; {False}\n')
+
+    # diagnosis, rule ID, and identifier in to a full-report file
     with open("../data/full_report.txt", "a") as file:
-        file.write(f'syntax error in {alias}\n')
-    sys.exit(0)
-
-#result = subprocess.run(["python", "rules.py"], capture_output=True, check=False).stdout
-
-#print("Result:", result)
-
-result = runpy.run_path('rules.py')
-
-#exec(open("rules.py").read()) # doesn't seem particularly faster than runpy? suggestions?
-
-registry = result["type_registry"]
-
-#run_namesake([i.value for i in entry.identifiers])
-#print()
-output : str = ""
-for i in entry.identifiers:
-    #print(i.value, i.role)
-    # run the rules from the registry
-    for key in registry.registry:
-        text_from_rule : str = registry.call(key, i)
-        if text_from_rule is not None:
-            output += (f'{alias}; Name misaligned with type; {key}; {i.value}\n')# {text_from_rule}\n')
-
-# diagnosis, rule ID, and identifier in to a full-report file
-with open("../data/full_report.txt", "a") as file:
-    file.write(output)
+        file.write(output)
+    return

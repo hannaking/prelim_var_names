@@ -1,13 +1,13 @@
 import libcst as cst
 import jedi
-from libcst.metadata import ParentNodeProvider
 from jorma.src.jorma.varinfo import VarInfo
 
 class Identifier(cst.MetadataDependent):
-    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider, cst.metadata.ParentNodeProvider,)
+    METADATA_DEPENDENCIES = (cst.metadata.PositionProvider, cst.metadata.ParentNodeProvider, cst.metadata.QualifiedNameProvider)
 
-    def __init__(self, node : cst.Node, position : cst.CodeRange, parent, source_code : str, role_dict : list[tuple[VarInfo, str]]): # start : cst.CodePosition, end : cst.CodePosition, source_code : str) -> None:
-        self.value : str = node.value
+    def __init__(self, node : cst.Node, position : cst.CodeRange, parent, source_code : str, role_dict : list[tuple[VarInfo, str]], qualified_name : str):
+        self.qualified_name : str = qualified_name
+        self.value : str = self.qualified_name.rsplit(".", 1)[-1]
         self.range : cst.metadata.CodeRange = cst.metadata.CodeRange(position.start, position.end)
         self.parent = parent
 
